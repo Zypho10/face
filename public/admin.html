@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Set Redirect URL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <style>
+      body { font-family: sans-serif; padding: 2rem; }
+      input { width: 300px; padding: 0.5rem; }
+      button { padding: 0.5rem 1rem; }
+      #current-url { margin-top: 1rem; color: green; }
+    </style>
+  </head>
+  <body>
+    <h2>Enter Redirect URL</h2>
+    <form action="/set-redirect" method="POST">
+      <input type="url" name="url" placeholder="https://example.com" required />
+      <button type="submit">Save</button>
+    </form>
+
+    <div id="current-url">Loading current URL...</div>
+
+    <script>
+      fetch('/get-redirect')
+        .then(res => res.json())
+        .then(data => {
+          const current = document.getElementById('current-url');
+          if (data.url) {
+            current.innerHTML = `Current redirect URL: <a href="${data.url}" target="_blank">${data.url}</a>`;
+          } else {
+            current.textContent = 'No redirect URL has been set yet.';
+          }
+        })
+        .catch(() => {
+          document.getElementById('current-url').textContent = 'Error fetching current URL.';
+        });
+    </script>
+  </body>
+</html>
